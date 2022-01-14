@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
 const bodyParser = require('body-parser');
 const express = require('express');
+const generateToken = require('./token');
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -27,6 +28,11 @@ router.get('/:id', async (req, res) => {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
   return res.status(200).json(findTalkerById);
+});
+
+// Requisito 03
+router.post('/', (_req, res) => {
+  res.status(200).json({ token: generateToken() });
 });
 
 module.exports = router;
