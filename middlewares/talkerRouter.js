@@ -18,4 +18,15 @@ router.get('/', async (_req, res) => {
   return res.status(200).json(listOfTalkers);
 });
 
+// Requisito 02
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  const listOfTalkers = await talkers();
+  const findTalkerById = listOfTalkers.find((talker) => talker.id === parseInt(id, 10));
+  if (!findTalkerById) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  return res.status(200).json(findTalkerById);
+});
+
 module.exports = router;
