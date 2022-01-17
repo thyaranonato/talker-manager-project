@@ -55,4 +55,17 @@ router.put('/:id', validateToken, validateName, validateAge, validateTalk,
   return res.status(200).json(listOfTalkers[findTalkerIndex]);
 });
 
+// Requisito 06
+// Resolução seguindo modelo do Course, link: https://app.betrybe.com/course/back-end/introducao-ao-desenvolvimento-web-com-nodejs/express-middlewares/0ba5165f-5fda-4b6b-8de7-d2ccf5782c18/conteudos/49c70140-9b30-435e-a433-f8f98dcb23ca/router-middleware/3fa04e83-1fc3-4e82-9d04-a979ccf370a9?use_case=side_bar
+router.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const listOfTalkers = await talkers();
+
+  const findTalkerIndex = listOfTalkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  listOfTalkers.splice(findTalkerIndex, 1);
+  await fs.writeFile('./talker.json', JSON.stringify(listOfTalkers));
+
+  return res.status(204).json();
+});
+
 module.exports = router;
