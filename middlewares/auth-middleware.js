@@ -76,7 +76,7 @@ const validateWatchedAt = (req, res, next) => {
   const watchedAtRegex = /^([0-3][0-1]|[0-2]\d)\/(0[1-9]|1[0-2])\/\d{4}/;
   const watchedAtTest = watchedAtRegex.test(watchedAt);
   if (!watchedAtTest) {
-    return res.status(400).json({ message: 'O campo "watchedAt" dete ter o formato "dd/mm/aaaa"' });
+    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
   return next();
 };
