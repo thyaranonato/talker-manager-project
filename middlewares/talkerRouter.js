@@ -1,7 +1,8 @@
 const fs = require('fs').promises;
 const bodyParser = require('body-parser');
 const express = require('express');
-const generateToken = require('./token');
+const { validateToken, validateName, validateAge, validateTalk,
+  validateWatchedAt, validateRate } = require('./auth-middleware');
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -30,9 +31,15 @@ router.get('/:id', async (req, res) => {
   return res.status(200).json(findTalkerById);
 });
 
-// Requisito 03
-router.post('/', (_req, res) => {
-  res.status(200).json({ token: generateToken() });
+// Requisito 04
+router.post('/', validateToken, validateName, validateAge, validateTalk,
+  validateWatchedAt, validateRate, async (req, res) => {
+  const listOfTalkers = await talkers();
+  const newTalker = { id: listOfTalkers.length + 1, ...req.body };
+
+  listOfTalkers.push(newTalker);
+  await fs.writeFile('./talker.json', JSON.stringify(listOfTalkers));
+  return res.status(201).json(newTalker);
 });
 
 module.exports = router;
