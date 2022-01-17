@@ -42,4 +42,17 @@ router.post('/', validateToken, validateName, validateAge, validateTalk,
   return res.status(201).json(newTalker);
 });
 
+// Requisito 05
+router.put('/:id', validateToken, validateName, validateAge, validateTalk,
+  validateWatchedAt, validateRate, async (req, res) => {
+  const { id } = req.params;
+  const listOfTalkers = await talkers();
+
+  const findTalkerIndex = listOfTalkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  listOfTalkers[findTalkerIndex] = { ...listOfTalkers[findTalkerIndex], ...req.body };
+  await fs.writeFile('./talker.json', JSON.stringify(listOfTalkers));
+
+  return res.status(200).json(listOfTalkers[findTalkerIndex]);
+});
+
 module.exports = router;
