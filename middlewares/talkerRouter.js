@@ -13,6 +13,15 @@ const talkers = async () => {
   return response;
 };
 
+// Requisito 07
+router.get('/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const listOfTalkers = await talkers();
+
+  const filteredTalker = listOfTalkers.filter((talker) => talker.name.includes(q));
+  return res.status(200).json(filteredTalker);
+});
+
 // Requisito 01
 router.get('/', async (_req, res) => {
   const listOfTalkers = await talkers();
@@ -65,7 +74,7 @@ router.delete('/:id', validateToken, async (req, res) => {
   listOfTalkers.splice(findTalkerIndex, 1);
   await fs.writeFile('./talker.json', JSON.stringify(listOfTalkers));
 
-  return res.status(204).json();
+  return res.status(204).end();
 });
 
 module.exports = router;
